@@ -1,0 +1,111 @@
+doctype html
+
+html
+head
+  style.
+    .field { margin-top: 0.5em; }
+    label { width: 500px; display: block; }
+    input, textarea { width: 500px; }
+body
+  h1 Authorize application
+
+  .field
+    label(for='mobiusNetwork') Stellar Network
+    input#mobiusNetwork(type="text", disabled=true, value=mobius.network.networkPassphrase())
+    label(for='appPublicKey') Application Public Key
+    input#appPublicKey(type="text", disabled="disabled", value=appKeypair.publicKey())
+
+  h2 Stage 1: Request Challenge
+
+  .field
+    textarea#challenge_xdr(disabled="disabled", rows="10")
+
+  .field
+    input#challenge(type="button", value="Request challenge")
+
+  h2 Stage 2: Sign Challenge
+
+  form
+    .field
+      label(for="public_key") Public Key:
+      input#public_key(type="text")
+    .field
+      label(for="secret") Private Key:
+      input#secret(type="text")
+    .field
+      input#sign(type="button", value="Sign and send challenge")
+
+  h2 Stage 3: Go to app with the token
+
+  .field
+    label(for="token") Token:
+    input#token(type=text)
+
+  .field
+    input#gotoapp(type="button", value="Go to App", disabled=true)
+
+  script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js")
+  script(src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js")
+  script(src="https://cdnjs.cloudflare.com/ajax/libs/stellar-sdk/0.8.1/stellar-sdk.js")
+  script.
+    $(function () {
+      var xdr = null;
+      var signedXDR = null;
+      var random_keypair = StellarSdk.Keypair.random();
+      var appPublicKey = $("#appPublicKey").val();
+
+      StellarSdk.Network.use(new StellarSdk.Network("#{mobius.network.networkPassphrase()}"));
+      $("#public_key").val(random_keypair.publicKey());
+      $("#secret").val(random_keypair.secret());
+
+      function verify(tx, keypair) {
+        const { signatures } = tx;
+        const hash = tx.hash();
+
+        if (!signatures || signatures.length === 0) {
+          return false;
+        }
+
+
+        return signatures.some(function(signature) { return keypair.verify(hash, signature.signature()) });
+      }
+
+
+      $("#challenge").on("click", function() {
+        axios.get("http://localhost:8080/auth").then(function(response) {
+          xdr = response.data;
+          $("#challenge_xdr").val(xdr);
+        }).catch(function(err) {
+          $("#result").html(err.message);
+        });
+      });
+
+      $("#sign").on("click", function() {
+        let keypair = StellarSdk.Keypair.fromSecret($("#secret").val())
+        let tx = new StellarSdk.Transaction(xdr);
+        let developerKeypair = StellarSdk.Keypair.fromPublicKey(appPublicKey);
+
+        if (!verify(tx, developerKeypair)) {
+          throw new Error("Wrong challenge transaction signature");
+        }
+        tx.sign(keypair);
+
+        signedXDR = tx.toEnvelope().toXDR("base64");
+
+        $("#signed_challenge_xdr").val(signedXDR);
+
+        axios.post("http://localhost:8080/auth", {
+          xdr: signedXDR,
+          public_key: keypair.publicKey()
+        }).then(function(response) {
+          $("#token").val(response.data);
+          $("#gotoapp").prop("disabled", false);
+        }).catch(function(err) {
+          $("#token").val(err.message);
+        });
+      });
+
+      $("#gotoapp").on("click", function() {
+        window.open(`http://localhost:8080/api/test?token=${$("#token").val()}`, "_blank");
+      });
+    });

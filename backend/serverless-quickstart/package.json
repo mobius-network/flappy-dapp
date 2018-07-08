@@ -1,0 +1,32 @@
+{
+  "name": "@mobius-network/dapp-server",
+  "version": "0.0.1",
+  "description": "Example DApp server running on webtask.io",
+  "main": "index.js",
+  "author": "Sergey Nebolsin",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "setup": "node setup.js",
+    "dev": "wt serve --secrets-file .secrets --meta-file .env .",
+    "deploy": "wt create --name dapp-server --secrets-file .secrets --meta-file .env --bundle .",
+    "watch": "wt create --name dapp-server --secrets-file .secrets --meta-file .env --bundle --watch ."
+  },
+  "dependencies": {
+    "@mobius-network/mobius-client-js": "^0.4.0",
+    "cors": "^2.8.4",
+    "express": "^4.16.3",
+    "express-jwt": "^5.3.1",
+    "jsonwebtoken": "^8.2.2",
+    "pug": "^2.0.3",
+    "stellar-sdk": "^0.8.1",
+    "webtask-tools": "^3.2.1"
+  },
+  "devDependencies": {
+    "axios": "^0.18.0",
+    "dotenv": "^6.0.0",
+    "inquirer": "^6.0.0",
+    "webtask-bundle": "^3.2.0",
+    "wt-cli": "^9.5.0"
+  }
+}
