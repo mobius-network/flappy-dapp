@@ -4,7 +4,7 @@
   "description": "Example Flappy Bird DApp",
   "main": "index.html",
   "scripts": {
-	"dev":  "lite-server --baseDir='public' --port=3000"
+	"dev":  "lite-server --baseDir='public'"
   },
   "author": "Mobius Network <developers@mobius.network> (https://mobius.network/)",
   "license": "Apache-2.0",
