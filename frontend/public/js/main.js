@@ -60,28 +60,31 @@ var loopPipeloop;
 
 var g_token = getUrlVars()["token"];
 if(!g_token) {
-  window.location.href = DAPP_STORE;
+	document.body.style.display = 'none';
+	window.alert('You are not logged in.');
 }
 
 var g_paying = false;
 
 $(document).ready(function() {
-   if(window.location.search == "?debug")
-      debugmode = true;
-   if(window.location.search == "?easy")
-      pipeheight = 200;
+	if(window.location.search == "?debug")
+		debugmode = true;
+	if(window.location.search == "?easy")
+		pipeheight = 200;
 
-   //get the highscore
-   var savedscore = getCookie("highscore");
-   if(savedscore != "")
-      highscore = parseInt(savedscore);
+	//get the highscore
+	var savedscore = getCookie("highscore");
+	if(savedscore != "")
+		highscore = parseInt(savedscore);
 
-   //start with the splash screen
-   showSplash();
+	if (g_token) {
+		//start with the splash screen
+		showSplash();
 
-   $.get(DAPP_API + "/balance?token=" + g_token, function(data) {
-     updateBalance(data.balance);
-   })
+		$.get(DAPP_API + "/balance?token=" + g_token, function (data) {
+			updateBalance(data.balance);
+		})
+	}
 });
 
 function updateBalance(balance) {
