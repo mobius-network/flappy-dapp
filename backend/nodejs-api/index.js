@@ -11,7 +11,6 @@ app.enable('strict routing');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Set Stellar network to use, based on webtask meta
 app.use((req, res, next) => {
 	const network = process.env.NETWORK;
   req.pubnet = network === 'public';

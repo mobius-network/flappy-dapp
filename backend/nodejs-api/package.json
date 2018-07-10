@@ -1,7 +1,7 @@
 {
 	"name": "nodejs-flappy-bird-api",
 	"version": "0.0.1",
-	"description": "Example DApp API using Node JS",
+	"description": "Example DApp API using Node.js",
 	"main": "index.js",
 	"author": "Mobius Network",
 	"license": "MIT",
