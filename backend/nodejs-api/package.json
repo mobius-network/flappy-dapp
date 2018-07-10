@@ -1,0 +1,20 @@
+{
+	"name": "nodejs-flappy-bird-api",
+	"version": "0.0.1",
+	"description": "Example DApp API using Node JS",
+	"main": "index.js",
+	"author": "Mobius Network",
+	"license": "MIT",
+	"scripts": {
+		"dev": "node index.js"
+	},
+	"dependencies": {
+		"@mobius-network/mobius-client-js": "^0.5.0",
+		"express": "^4.16.3",
+		"express-jwt": "^5.3.1",
+		"jsonwebtoken": "^8.3.0"
+	},
+	"devDependencies": {
+		"dotenv": "^6.0.0"
+	}
+}
