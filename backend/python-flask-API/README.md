@@ -1,19 +1,46 @@
-These are instructions to run the floppy-bird Flask API
-Remember this is a example app and is not intended for production use, only to test the mobius python sdk and showcase It's Classes/Functions,
-So there's some steps to take before you can run the app.
+# Mobius Python Flask API
 
-1. Create virtualenv with: $ virtualenv -p python3 env
-2. Activate env with : $ source env/bin/activate
-3. Install requirements from python sdk with : $ pip install -r requirements.txt
-4. Export needed vars for the api to work : $ export FLASK_ENV=development
-                                           $ export APP_KEY={you're developer keypair}
-                                           $ export FLASK_APP={path to api.py}
-5. Run the API with (Do this from directory outside the mobius sdk folder): $ python -m flask run
-6. Get the challenge and token from API recommended to use some API development tool like Postman or another rest client
-  - Get challenge xdr from : GET http://{API_DOMAIN}/api/
-  - Post challenge xdr to get the token: : POST http://{API_DOMAIN}/api/ with {"xdr":"(you're challenge xdr from last step)"}
-(I'll leave get_token.py script that does above requests and writes token to token.txt)
-- Post token to : POST http://{API_DOMAIN}/api/test?token={you're token} to get public key
-7. Go to https://mobius.network/friendbot and add some MOBI coins to you're account
-8. Change DAPP_API in flappy-dapp/frontend/public/js/main.js into url of the api (localhost:5000/api in my case)  
-9. go to http://{APP_DOMAIN}/?token={you're token} and enjoy the game.
+This repo provides a default implementation of a Mobius DApp using a Python Flask API. It exposes some generaic API calls, like `/balance` and `/charge`. Note this is only intended to be a working example and is not for production use.
+
+## Install
+
+```console
+# From the root of the folder, run the following commands:
+
+# Clone `mobius-client-python`
+$ https://github.com/mobius-network/mobius-client-python.git
+
+# Run
+$ python setup.py install
+
+# Create virtualenv
+$ virtualenv -p python3 env
+
+# For first time use, activate env
+$ source env/bin/activate
+
+# Install requirements
+$ pip install -r requirements.txt
+```
+
+## Set ENV Variables
+
+A dev-wallet is needed to set `APP_KEY` environment variable. If you do not have a dev-wallet see <a href="https://docs.mobius.network/docs/installation#section-generating-key-pairs" target="_blank">Generating Key Pairs</a> in Mobius Docs.
+
+```console
+# Set development env
+$ export FLASK_ENV=development
+
+# Set the developer secret seed using dev-wallet.html
+$ export APP_KEY=YOUR-SECRET-SEED
+
+# Set the path to api.py
+$ export FLASK_APP=PATH-TO-API.PY
+```
+
+## Run
+
+```console
+# Run locally
+$ python -m flask run
+```
