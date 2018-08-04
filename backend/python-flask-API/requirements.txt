@@ -1,6 +1,5 @@
 stellar-base
 flask
-mobius-client-python
 requests
 Flask-Cors
 Flask-JWT
