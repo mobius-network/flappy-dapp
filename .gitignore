@@ -3,3 +3,6 @@ node_modules/
 .secrets
 dev.html
 dev-wallet.html
+env/
+mobius-client-python
+__pycache__
