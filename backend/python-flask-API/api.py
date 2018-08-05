@@ -30,156 +30,153 @@ app_key = app.config['APP_KEY']
 
 dev_keypair = Keypair.from_seed(app_key)
 
-def app_instance(public_key):
-	app = AppBuilder().build(dev_keypair.seed(), public_key)
+def dapp_instance(public_key):
+    dapp = AppBuilder().build(dev_keypair.seed(), public_key)
 
-	return app
+    return dapp
 
 
 def login_required(f):
-	@wraps(f)
-	def decorated_function(*args, **kwargs):
-		if request.args.get('token') is None:
-			return abort(403, description='Token missing.')
-		else:
-			token = request.args.get('token')
-			jwt = Jwt(secret=app_key)
-			jwt_token = jwt.decode(value=token)
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if request.args.get('token') is None:
+            return abort(403, description='Token missing.')
+        else:
+            token = request.args.get('token')
+            jwt = Jwt(secret=app_key)
+            jwt_token = jwt.decode(value=token)
 
-		return f(public_key=jwt_token['public_key'], *args, **kwargs)
-	return decorated_function
+        return f(public_key=jwt_token['public_key'], *args, **kwargs)
+    return decorated_function
 
 
 @app.route('/auth', methods=['GET','POST'])
 def index():
-	try:
-		if request.method == 'GET':
-			time = datetime.datetime.now() + datetime.timedelta(days=60)
+    try:
+        if request.method == 'GET':
+            time = datetime.datetime.now() + datetime.timedelta(days=60)
 
-			challenge_te_xdr = Challenge(developer_secret=dev_keypair.seed(),
-								expires_in=time)\
-								.call()
+            challenge_te_xdr = Challenge(developer_secret=dev_keypair.seed(),
+                                expires_in=time)\
+                                .call()
 
-			return challenge_te_xdr
+            return challenge_te_xdr
 
-		elif request.method == 'POST':
-			token = Token(
-				developer_secret=app_key,
-				te_xdr=request.args['xdr'],
-				address=request.args['public_key']
-			)
+        elif request.method == 'POST':
+            token = Token(
+                developer_secret=app_key,
+                te_xdr=request.args['xdr'],
+                address=request.args['public_key']
+            )
 
-			token.validate()
+            token.validate()
 
-			jwt = Jwt(secret=app_key)
+            jwt = Jwt(secret=app_key)
+            jwt_token = jwt.encode(token=token)
 
-			jwt_token = jwt.encode(token=token)
-
-			return jsonify(jwt_token.decode())
-	except Exception as error:
-		return error
+            return jsonify(jwt_token.decode())
+    except Exception as error:
+        return error
 
 
 @app.route('/api/test', methods=['POST'])
 @login_required
 def test(public_key):
-	try:
-		print(user)
-		return jsonify(user.address)
-	except Exception as error:
-		return error
+    try:
+        print(user)
+        return jsonify(user.address)
+    except Exception as error:
+        return error
 
 
 @app.route('/api/balance',methods=['GET'])
 @login_required
 def balance(public_key):
-	try:
-		dapp = app_instance(public_key)
-		return jsonify({'balance': dapp.user_balance()})
-	except Exception as error:
-		return error
+    try:
+        dapp = dapp_instance(public_key)
+        return jsonify({'balance': dapp.user_balance()})
+    except Exception as error:
+        return error
 
 
 @app.route('/api/charge', methods=['POST'])
 @login_required
 def charge(public_key):
-	try:
-		dapp = app_instance(public_key)
+    try:
+        dapp = dapp_instance(public_key)
 
-		try:
-			data = json.loads(request.data.decode('utf-8'))
-			amount = data['amount']
-		except:
-			amount = 1
+        try:
+            data = json.loads(request.data.decode('utf-8'))
+            amount = data['amount']
+        except:
+            amount = 1
 
-		if not amount or not float(amount):
-			return abort(400, description='Invalid amount')
+        if not amount or not float(amount):
+            return abort(400, description='Invalid amount')
 
-		response = dapp.charge(amount)
+        response = dapp.charge(amount)
+        hash_meta = binascii.hexlify(response.hash_meta()).decode()
 
-		hash_meta = binascii.hexlify(response.hash_meta()).decode()
-
-		return jsonify({
-			'status': 'ok',
-			'tx_hash': hash_meta,
-			'balance': dapp.user_balance(),
-		})
-
-	except Exception as error:
-		return error
+        return jsonify({
+            'status': 'ok',
+            'tx_hash': hash_meta,
+            'balance': dapp.user_balance(),
+        })
+    except Exception as error:
+        return error
 
 
 @app.route('/api/payout', methods=['POST'])
 @login_required
 def payout(public_key):
-	try:
-		dapp = app_instance(public_key)
-		data = json.loads(request.data.decode('utf-8'))
-		amount = data['amount']
-		target = data['target_address']
+    try:
+        dapp = dapp_instance(public_key)
+        data = json.loads(request.data.decode('utf-8'))
+        amount = data['amount']
+        target = data['target_address']
 
-		if not amount or not float(amount):
-			return abort(400, description='Invalid amount')
+        if not amount or not float(amount):
+            return abort(400, description='Invalid amount')
 
-		if not target:
-			return abort(400, description='Invalid target address')
+        if not target:
+            return abort(400, description='Invalid target address')
 
-		response = dapp.payout(amount, target)
-		hash_meta = binascii.hexlify(response.hash_meta()).decode()
+        response = dapp.payout(amount, target)
+        hash_meta = binascii.hexlify(response.hash_meta()).decode()
 
-		return jsonify({
-			'status': 'ok',
-			'tx_hash': hash_meta,
-			'balance': dapp.user_balance(),
-		})
+        return jsonify({
+            'status': 'ok',
+            'tx_hash': hash_meta,
+            'balance': dapp.user_balance(),
+        })
 
-	except Exception as error:
-		return error
+    except Exception as error:
+        return error
 
 
 @app.route('/api/transfer', methods=['POST'])
 @login_required
 def transfer(public_key):
-	try:
-		dapp = app_instance(public_key)
-		data = json.loads(request.data.decode('utf-8'))
+    try:
+        dapp = dapp_instance(public_key)
+        data = json.loads(request.data.decode('utf-8'))
 
-		amount = data['amount']
-		target = data['target_address']
+        amount = data['amount']
+        target = data['target_address']
 
-		if not amount or not float(amount):
-			return abort(400, description='Invalid amount')
+        if not amount or not float(amount):
+            return abort(400, description='Invalid amount')
         
-		if not target:
-			return abort(400, description='Invalid target address')
+        if not target:
+            return abort(400, description='Invalid target address')
 
-		response = dapp.transfer(amount, target)
-		hash_meta = binascii.hexlify(response.hash_meta()).decode()
+        response = dapp.transfer(amount, target)
+        hash_meta = binascii.hexlify(response.hash_meta()).decode()
 
-		return jsonify({
-			'status': 'ok',
-			'tx_hash': hash_meta,
-			'balance': dapp.user_balance(),
-		})
-	except Exception as error:
-		return error
+        return jsonify({
+            'status': 'ok',
+            'tx_hash': hash_meta,
+            'balance': dapp.user_balance(),
+        })
+    except Exception as error:
+        return error
