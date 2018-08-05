@@ -1,14 +1,12 @@
-# Mobius DApp Server
+# Mobius DApp Serverless Quickstart
 
 This repo provides a default implementation of Mobius DApp backend running on [Webtask.io](https://webtask.io).
-It exposes some generic API calls, like `/balance` and `/charge`. If your DApp frontend requires something
-different, you can fork this repo and extend the API up to your needs.
+It exposes some generic API endpoints like `/api/balance` and `/api/charge`. For more detailed documentation on this example, see the official <a href="https://docs.mobius.network/docs/serverless-quickstart-api" target="_blank">Mobius Docs</a>.
 
 ## Install
 
 ```console
-$ git clone https://github.com/mobius-network/dapp-server-js.git
-$ cd dapp-server-js
+$ cd backend/serverless-quickstart
 $ yarn install
 ```
 
@@ -27,9 +25,6 @@ $ yarn setup
 ```console
 # Run locally
 $ yarn dev
-
-# Open development page
-$ open dev.html
 
 # Deploy to Webtask.io
 $ yarn deploy

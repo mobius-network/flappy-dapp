@@ -1,16 +1,17 @@
 # Mobius Python Flask API
 
-This repo provides a default implementation of a Mobius DApp using a Python Flask API. It exposes some generaic API calls, like `/api/balance` and `/api/charge`. This is only intended to be a working example and is not for production use. For more detailed documentation on this example, see the official <a href="https://docs.mobius.network/docs/python-flask-api" target="_blank">Mobius Docs</a>.
+This repo provides a default implementation of a Mobius DApp using a Python Flask API. It exposes some generic
+API endpoints like `/api/balance` and `/api/charge`. For more detailed documentation on this example, see the official <a href="https://docs.mobius.network/docs/python-flask-api" target="_blank">Mobius Docs</a>.
 
 ## Install
 
 ```console
-# From the root of the folder, run the following commands:
+$ cd backend/python-flask-api
 
 # Create virtualenv
 $ virtualenv -p python3 env
 
-# For first time use, activate env
+# Activate env
 $ source env/bin/activate
 
 # Install requirements
