@@ -1,0 +1,7 @@
+{
+	"name": "mobius-network/flappy-dapp-php",
+	"description": "Mobius Flayy DApp PHP",
+	"require": {
+		"mobius-network/mobius-client-php": "0.*"
+	}
+} 
