@@ -6,3 +6,4 @@ dev-wallet.html
 env/
 mobius-client-python
 __pycache__
+vendor

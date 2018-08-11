@@ -1,15 +1,26 @@
-# Mobius PHP API 
+ # Mobius PHP API
 
-This repo provides a default implementation of a Mobius DApp using PHP API. It exposes some generic
-API endpoints like `/balance` and `/charge`.
+This repo provides a default implementation of a Mobius DApp using a Python Flask API. It exposes some generic API endpoints like `/api/balance` and `/api/charge`. For more detailed documentation on this example, see the official <a href="https://docs.mobius.network/docs/php-api" target="_blank">Mobius Docs</a>.
 
 ## Install
 
-Run this composer command
 ```console
-$ composer require mobius-network/flappy-dapp-php
+$ cd backend/php-api
+$ composer install
 ```
 
-## Set JWT and Seed
+## Set ENV Variables
 
-There is `config.php` file in root directory of this PHP repo. You can put your own values for `SECRET_KEY` and `JWT_SECRET` constants. Currently there is a constant `STELLAR_PUBLICNET` that is set to `false` (for testnet) by default. You can set it to `true` for public net.
+A dev-wallet is needed to set `APP_KEY` environment variable. If you do not have a dev-wallet see <a href="https://docs.mobius.network/docs/installation#section-generating-key-pairs" target="_blank">Generating Key Pairs</a> in Mobius Docs.
+
+```console
+# Open config.php and set the APP_KEY
+$ define('APP_KEY', 'YOUR-SECRET-KEY');
+```
+
+## Run
+
+```console
+# Run locally
+$ php -S localhost:8080
+```
