@@ -51,10 +51,10 @@ if($endpoint == '/auth') {
 }
 else if($endpoint == '/api/balance' && $_SERVER['REQUEST_METHOD'] == 'GET'){
 	try{
-        
         $public_key = getPublicKey($_GET['token']);
-        $app = new Mobius\Client\App(APP_KEY, $public_key);
-        echo json_encode( array( 'balance' => $app->balance()));
+        $dapp = new Mobius\Client\App(APP_KEY, $public_key);
+
+        echo json_encode( array( 'balance' => $dapp->user_balance()));
     }catch(\Exception $e){
         echo $e->getMessage();
     }
@@ -71,12 +71,12 @@ else if($endpoint == '/api/charge' && $_SERVER['REQUEST_METHOD'] == 'POST'){
             $amount = 1;
         }
 
-        $app = new Mobius\Client\App(APP_KEY, $public_key);
-        $response = $app->charge($amount);
+        $dapp = new Mobius\Client\App(APP_KEY, $public_key);
+        $response = $dapp->charge($amount);
         echo json_encode( array(
                 'status'    => 'ok',
                 'tx_hash'   => $response->getRawData()['hash'],
-                'balance' => $app->balance()
+                'balance' => $dapp->user_balance()
             )
         );
     }catch(\Exception $e){
@@ -100,12 +100,12 @@ else if($endpoint == '/api/payout' && $_SERVER['REQUEST_METHOD'] == 'POST'){
             die;
         }
         
-        $app = new Mobius\Client\App(APP_KEY, $public_key);
-        $response = $app->payout($amount, $target_address);
+        $dapp = new Mobius\Client\App(APP_KEY, $public_key);
+        $response = $dapp->payout($amount, $target_address);
         echo json_encode( array(
                 'status'  => 'ok',
                 'tx_hash' => $response->getRawData()['hash'],
-                'balance' => $app->balance()
+                'balance' => $dapp->user_balance()
             )
         );
     }catch(\Exception $e){
@@ -128,13 +128,13 @@ else if($endpoint == '/api/transfer' && $_SERVER['REQUEST_METHOD'] == 'POST'){
             echo 'Invalid Target Address!';
             die;
         }
-        $app = new Mobius\Client\App(APP_KEY, $public_key);
-        $response = $app->transfer($amount, $target_address);
+        $dapp = new Mobius\Client\App(APP_KEY, $public_key);
+        $response = $dapp->transfer($amount, $target_address);
 
         echo json_encode( array(
                 'status'    => 'ok',
                 'tx_hash'   => $response->getRawData()['hash'],
-                'balance' => $app->balance()
+                'balance' => $dapp->user_balance()
             )
         );
     }catch(\Exception $e){

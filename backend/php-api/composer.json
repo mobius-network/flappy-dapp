@@ -2,6 +2,6 @@
 	"name": "mobius-network/flappy-dapp",
 	"description": "Mobius Flappy DApp PHP",
 	"require": {
-		"mobius-network/mobius-client-php": "0.*"
+		"mobius-network/mobius-client-php": "^0.04.0"
 	}
 }

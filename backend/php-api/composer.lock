@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "8331bcd80a01d6913be61b5494df82bc",
+    "content-hash": "eb8b317c60483dd600206300cf9f17f2",
     "packages": [
         {
             "name": "christian-riesen/base32",
@@ -289,16 +289,16 @@
         },
         {
             "name": "mobius-network/mobius-client-php",
-            "version": "0.0.3",
+            "version": "0.04",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mobius-network/mobius-client-php.git",
-                "reference": "63ce72c82682d8f6cd1ba6f7998e518d29b625e5"
+                "reference": "5372a908f96c14d520adb773096dbe77ce0e28c7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mobius-network/mobius-client-php/zipball/63ce72c82682d8f6cd1ba6f7998e518d29b625e5",
-                "reference": "63ce72c82682d8f6cd1ba6f7998e518d29b625e5",
+                "url": "https://api.github.com/repos/mobius-network/mobius-client-php/zipball/5372a908f96c14d520adb773096dbe77ce0e28c7",
+                "reference": "5372a908f96c14d520adb773096dbe77ce0e28c7",
                 "shasum": ""
             },
             "require": {
@@ -332,7 +332,7 @@
             ],
             "description": "Mobius DApp Store PHP SDK",
             "homepage": "https://github.com/mobius-network/mobius-client-php",
-            "time": "2018-08-08T22:02:38+00:00"
+            "time": "2018-08-13T20:59:18+00:00"
         },
         {
             "name": "paragonie/random_compat",

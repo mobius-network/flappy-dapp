@@ -34,6 +34,14 @@ Run an API example using Python and the `mobius-client-python` SDK. Navigate to 
 $ cd backend/python-flask-api
 ```
 
+### PHP API
+
+Run an API example using PHP and the `mobius-client-php` SDK. Navigate to the `php-api` directory to run this API. For full documentation on this example, visit the official <a href="https://docs.mobius.network/docs/php-api" target="_blank">PHP API docs</a>.
+
+```console
+$ cd backend/php-api
+```
+
 ## Frontend Configuration
 The frontend of the application only needs minor setup and configuration to run. Full documentation on this process can be found by choosing any example from the official <a href="https://docs.mobius.network/docs" target="_blank">Mobius Docs</a>.
 
