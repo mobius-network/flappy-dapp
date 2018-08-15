@@ -13,9 +13,9 @@ $ composer install
 
 A dev-wallet is needed to set `APP_KEY` environment variable. If you do not have a dev-wallet see <a href="https://docs.mobius.network/docs/installation#section-generating-key-pairs" target="_blank">Generating Key Pairs</a> in Mobius Docs.
 
-```console
-# Open config.php and set the APP_KEY
-$ define('APP_KEY', 'YOUR-SECRET-KEY');
+```php
+// Open config.php and set the APP_KEY
+define('APP_KEY', 'YOUR-SECRET-KEY');
 ```
 
 ## Run
