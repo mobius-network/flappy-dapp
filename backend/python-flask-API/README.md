@@ -16,15 +16,6 @@ $ source env/bin/activate
 
 # Install requirements
 $ pip install -r requirements.txt
-
-# Clone mobius-client-python
-$ git clone https://github.com/mobius-network/mobius-client-python.git
-
-# Navigate to mobius-client-python
-$ cd mobius-client-python
-
-# Run
-$ python setup.py install
 ```
 
 ## Set ENV Variables
@@ -41,7 +32,7 @@ $ export FLASK_ENV=development
 $ export APP_KEY=YOUR-SECRET-SEED
 
 # Set the path to api.py
-$ export FLASK_APP=PATH-TO-API.PY
+$ export FLASK_APP=api.py
 ```
 
 ## Run
