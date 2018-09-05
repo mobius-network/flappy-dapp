@@ -23,8 +23,6 @@ $ pip install -r requirements.txt
 A dev-wallet is needed to set `APP_KEY` environment variable. If you do not have a dev-wallet see <a href="https://docs.mobius.network/docs/installation#section-generating-key-pairs" target="_blank">Generating Key Pairs</a> in Mobius Docs.
 
 ```console
-# Navigate back to the root of the python-flask-API folder
-
 # Set development env
 $ export FLASK_ENV=development
 

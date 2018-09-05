@@ -1,5 +1,5 @@
 stellar-base
-mobius-client-python
+mobius-client
 flask
 requests
 Flask-Cors
