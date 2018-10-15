@@ -3,15 +3,16 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
 
 namespace DotNetCore.API.Models
 {
-	public class TokenRequest
+	public class PaymentRequest
 	{
 		[Required]
-		public string PublicKey { get; set; }
-		[Required]
-		public string Xdr { get; set; }
+		public decimal Amount { get; set; }
+		[DataMember(Name="target_address")]
+		public string TargetAddress { get; set; }
 	}
 }

@@ -3,30 +3,77 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Configuration;
+using Mobius.Library;
+using Mobius.Library.App;
+using Stellar = stellar_dotnet_sdk;
+using DotNetCore.API.Models;
 
-namespace dotnet_core_api.Controllers
+namespace DotNetCore.API.Controllers
 {
     [Route("api")]
-    public class ApiController : ControllerBase
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    public class ApiController : Controller
     {
-        // GET api/values
-        [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        private IConfiguration Configuration;
+        private string APP_KEY {get; set;}
+        public ApiController(IConfiguration configuration)
         {
-            return new string[] { "value1", "value2" };
+            this.Configuration = configuration;
+            this.APP_KEY = Configuration.GetValue("APP_KEY", "string");
         }
 
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        [HttpGet("test")]
+        public ActionResult<dynamic> Test()
         {
-            return "value";
+            return User.Claims.Select(c => new {
+                Issuer = c.Issuer,
+                PublicKey = c.Value,
+                Type = c.Type
+            }).FirstOrDefault();
+        }
+
+        [HttpGet("balance")]
+        public async Task<IActionResult> GetBalance()
+        {
+            try 
+            {
+                string userPublicKey = User.Claims.FirstOrDefault().Value;
+                App dapp = await new AppBuilder().Build(this.APP_KEY, userPublicKey);
+
+                return Ok(dapp.UserBalance());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         // POST api/values
-        [HttpPost]
-        public void Post([FromBody] string value)
+        [HttpPost("charge")]
+        public async Task<IActionResult> Charge([FromBody] PaymentRequest request)
         {
+            if (request.Amount <= 0) return BadRequest("Invalid Amount");
+
+            try 
+            {
+                string userPublicKey = User.Claims.FirstOrDefault().Value;
+                App dapp = await new AppBuilder().Build(this.APP_KEY, userPublicKey);
+
+                var response = await dapp.Charge(request.Amount, request.TargetAddress);
+
+                return Ok(new {
+                    status = "Ok",
+                    tx_hash = response.EnvelopeXdr,
+                    balance = dapp.UserBalance()
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
     }
 }

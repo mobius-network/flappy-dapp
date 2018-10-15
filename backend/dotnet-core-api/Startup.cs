@@ -15,7 +15,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Stellar = stellar_dotnet_sdk;
 
-namespace dotnet_core_api
+namespace DotNetCore.API
 {
     public class Startup
     {
@@ -31,20 +31,24 @@ namespace dotnet_core_api
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            // services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            //     .AddJwtBearer(options => {
-            //         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.GetSection("SecurityKey").GetValue<string>("Key")));
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options => {
 
-            //         options.TokenValidationParameters = new TokenValidationParameters {
-            //             ValidateIssuer = true,
-            //             ValidateAudience = true,
-            //             ValidateLifetime = true,
-            //             ValidateIssuerSigningKey = true,
-            //             ValidIssuer = "mobius.network",
-            //             ValidAudience = "mobius.network",
-            //             IssuerSigningKey = key
-            //         };
-            //     });
+                    string APP_KEY = Configuration.GetValue("APP_KEY", "string");
+                    string APP_DOMAIN = Configuration.GetValue("APP_DOMAIN", "string");
+
+                    SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(APP_KEY));
+
+                    options.TokenValidationParameters = new TokenValidationParameters {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = APP_DOMAIN,
+                        ValidAudience = APP_DOMAIN,
+                        IssuerSigningKey = key
+                    };
+                });
 
             services.AddCors(o => o.AddPolicy("DevelopmentCORS", builder => {
                 builder
