@@ -165,17 +165,23 @@ function startGame() {
 
   $("#credits_balance").html("Paying.........");
 
-   $.post(DAPP_API + "/charge?token=" + g_token, { amount: DAPP_PRICE })
-     .done(function (data) {
-       updateBalance(data.balance);
-       startGameReal();
-     })
-     .fail(function (data) {
-       alert("Oh no you don't have enough credits!! Buy more credits at https://mobius.network/store");
-     })
-     .always(function() {
-        g_paying = false;
-     });
+  var config = {
+    headers: {
+      Authorization: Bearer + ' ' + g_token,
+    }
+  }
+
+  $.post(DAPP_API + "/charge?token=" + g_token, { amount: DAPP_PRICE }, config)
+    .done(function (data) {
+      updateBalance(data.balance);
+      startGameReal();
+    })
+    .fail(function (data) {
+      alert("Oh no you don't have enough credits!! Buy more credits at https://mobius.network/store");
+    })
+    .always(function() {
+      g_paying = false;
+    });
 }
 
 function startGameReal() {
