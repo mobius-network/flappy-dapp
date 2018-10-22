@@ -66,7 +66,56 @@ namespace DotNetCore.API.Controllers
 
                 return Ok(new {
                     status = "Ok",
-                    tx_hash = response.EnvelopeXdr,
+                    tx_hash = response.Hash,
+                    balance = dapp.UserBalance()
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpPost("transfer")]
+        public async Task<IActionResult> Transfer([FromBody] PaymentRequest request)
+        {
+            if (request.Amount <= 0) return BadRequest("Invalid Amount");
+            if (request.TargetAddress == null) return BadRequest("Invalid Target Address");
+
+            try 
+            {
+                string userPublicKey = User.Claims.FirstOrDefault().Value;
+                App dapp = await new AppBuilder().Build(this.APP_KEY, userPublicKey);
+
+                var response = await dapp.Transfer(request.Amount, request.TargetAddress);
+
+                return Ok(new {
+                    status = "Ok",
+                    tx_hash = response.Hash,
+                    balance = dapp.UserBalance()
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpPost("payout")]
+        public async Task<IActionResult> Payout([FromBody] PaymentRequest request)
+        {
+            if (request.Amount <= 0) return BadRequest("Invalid Amount");
+
+            try 
+            {
+                string userPublicKey = User.Claims.FirstOrDefault().Value;
+                App dapp = await new AppBuilder().Build(this.APP_KEY, userPublicKey);
+
+                var response = await dapp.Payout(request.Amount, request.TargetAddress);
+
+                return Ok(new {
+                    status = "Ok",
+                    tx_hash = response.Hash,
                     balance = dapp.UserBalance()
                 });
             }

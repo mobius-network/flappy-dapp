@@ -12,7 +12,7 @@ namespace DotNetCore.API.Models
 	{
 		[Required]
 		public decimal Amount { get; set; }
-		[DataMember(Name="target_address")]
+		[JsonProperty(PropertyName="target_address")]
 		public string TargetAddress { get; set; }
 	}
 }
