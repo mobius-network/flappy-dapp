@@ -29,13 +29,14 @@ namespace DotNetCore.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            string APP_KEY = Configuration.GetValue("APP_KEY", "string");
+            string APP_DOMAIN = Configuration.GetValue("APP_DOMAIN", "string");
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options => {
 
-                    string APP_KEY = Configuration.GetValue("APP_KEY", "string");
-                    string APP_DOMAIN = Configuration.GetValue("APP_DOMAIN", "string");
 
                     SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(APP_KEY));
 
@@ -50,7 +51,7 @@ namespace DotNetCore.API
                     };
                 });
 
-            services.AddCors(o => o.AddPolicy("DevelopmentCORS", builder => {
+            services.AddCors(o => o.AddPolicy("All", builder => {
                 builder
                     .AllowAnyOrigin()
                     .AllowAnyMethod()
@@ -58,13 +59,13 @@ namespace DotNetCore.API
                     .AllowCredentials();
             }));
 
-            // services.AddCors(o => o.AddPolicy("ProductionCORS", builder => {
-            //     builder
-            //         .AllowAnyOrigin()
-            //         .AllowAnyMethod()
-            //         .AllowAnyHeader()
-            //         .AllowCredentials();
-            // }));
+            services.AddCors(o => o.AddPolicy("Prod", builder => {
+                builder
+                    .WithOrigins(APP_DOMAIN)
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials();
+            }));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -73,15 +74,14 @@ namespace DotNetCore.API
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-
-                app.UseCors("DevelopmentCORS");
+                app.UseCors("All");
                 Stellar.Network.UseTestNetwork();
             }
             else
             {
                 app.UseHsts();
-                // app.UseHttpsRedirection();
-                // app.UseCors("ProductionCORS");
+                app.UseHttpsRedirection();
+                app.UseCors("Prod");
                 Stellar.Network.UsePublicNetwork();
             }
 

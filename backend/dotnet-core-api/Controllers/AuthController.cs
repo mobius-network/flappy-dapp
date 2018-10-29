@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Cors;
 using Stellar = stellar_dotnet_sdk;
 using Auth = Mobius.Library.Auth;
 using DotNetCore.API.Models;
@@ -15,6 +16,7 @@ using DotNetCore.API.Models;
 namespace DotNetCore.API.Controllers
 {
     [Route("auth")]
+    [EnableCors("All")]
     public class AuthController : ControllerBase
     {
         private IConfiguration Configuration;
@@ -51,19 +53,20 @@ namespace DotNetCore.API.Controllers
 
             try
             {
-                Auth.Token token = new Auth.Token(this.APP_KEY, xdr, public_key);
+                var token = new Auth.Token(this.APP_KEY, xdr, public_key);
                 token.Validate();
 
-                SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.APP_KEY));
-			    SigningCredentials creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.APP_KEY));
+			    var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
                 Claim[] claims = new[]
 				{
 					new Claim(ClaimTypes.NameIdentifier, public_key),
-					new Claim("public_key", public_key )
+					new Claim("public_key", public_key ),
+                    new Claim(JwtRegisteredClaimNames.Jti, token.Hash())
 				};
 
-                Stellar.TimeBounds timebounds = token.TimeBounds();
+                var timebounds = token.TimeBounds();
 
                 JwtSecurityToken payload = new JwtSecurityToken(
 					issuer: this.APP_DOMAIN,
