@@ -43,7 +43,9 @@ namespace DotNetCore.API.Controllers
                 string userPublicKey = User.Claims.FirstOrDefault().Value;
                 App dapp = await new AppBuilder().Build(this.APP_KEY, userPublicKey);
 
-                return Ok(dapp.UserBalance());
+                return Ok(new {
+                    balance = dapp.UserBalance()
+                });
             }
             catch (Exception ex)
             {
@@ -53,7 +55,7 @@ namespace DotNetCore.API.Controllers
 
         // POST api/values
         [HttpPost("charge")]
-        public async Task<IActionResult> Charge([FromBody] PaymentRequest request)
+        public async Task<IActionResult> Charge([FromForm] PaymentRequest request)
         {
             if (request.Amount <= 0) return BadRequest("Invalid Amount");
 
@@ -77,7 +79,7 @@ namespace DotNetCore.API.Controllers
         }
 
         [HttpPost("transfer")]
-        public async Task<IActionResult> Transfer([FromBody] PaymentRequest request)
+        public async Task<IActionResult> Transfer([FromForm] PaymentRequest request)
         {
             if (request.Amount <= 0) return BadRequest("Invalid Amount");
             if (request.TargetAddress == null) return BadRequest("Invalid Target Address");
@@ -102,7 +104,7 @@ namespace DotNetCore.API.Controllers
         }
 
         [HttpPost("payout")]
-        public async Task<IActionResult> Payout([FromBody] PaymentRequest request)
+        public async Task<IActionResult> Payout([FromForm] PaymentRequest request)
         {
             if (request.Amount <= 0) return BadRequest("Invalid Amount");
 
