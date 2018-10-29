@@ -66,6 +66,12 @@ if(!g_token) {
 
 var g_paying = false;
 
+$.ajaxSetup({
+  headers:{
+    'Authorization': 'Bearer ' + g_token
+  }
+});
+
 $(document).ready(function() {
 	if(window.location.search == "?debug")
 		debugmode = true;
@@ -165,13 +171,7 @@ function startGame() {
 
   $("#credits_balance").html("Paying.........");
 
-  var config = {
-    headers: {
-      Authorization: Bearer + ' ' + g_token,
-    }
-  }
-
-  $.post(DAPP_API + "/charge?token=" + g_token, { amount: DAPP_PRICE }, config)
+  $.post(DAPP_API + "/charge?token=" + g_token, { amount: DAPP_PRICE })
     .done(function (data) {
       updateBalance(data.balance);
       startGameReal();
