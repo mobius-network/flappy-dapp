@@ -5,11 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\mobius-client-dotnet\Mobius.Library\Mobius.Library.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="mobius-client-dotnet" Version="1.0.0" />
     <PackageReference Include="stellar-dotnet-sdk" Version="2.1.0" />
   </ItemGroup>
 

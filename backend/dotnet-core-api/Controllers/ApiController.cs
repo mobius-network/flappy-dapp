@@ -53,7 +53,6 @@ namespace DotNetCore.API.Controllers
             }
         }
 
-        // POST api/values
         [HttpPost("charge")]
         public async Task<IActionResult> Charge([FromForm] PaymentRequest request)
         {

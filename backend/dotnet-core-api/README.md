@@ -8,7 +8,6 @@ documentation on this example, see the official <a href="https://docs.mobius.net
 
 ```console
 $ cd backend/dotnet-core-api
-$ dotnet restore
 ```
 
 ## Set ENV Variables
@@ -17,8 +16,10 @@ Using the `appsettings.Development.json` file, populate `APP_KEY` with your secr
 dev-wallet see <a href="https://docs.mobius.network/docs/installation#section-generating-key-pairs" target="_blank">Generating Key Pairs</a>
 in Mobius Docs.
 
-```console
-"APP_KEY": "YOUR-SECRET-SEED"
+```json
+{
+  "APP_KEY": "YOUR-SECRET-SEED"
+}
 ```
 
 ## Run
