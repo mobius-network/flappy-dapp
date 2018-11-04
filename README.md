@@ -42,6 +42,14 @@ Run an API example using PHP and the `mobius-client-php` SDK. Navigate to the `p
 $ cd backend/php-api
 ```
 
+### .NET Core API
+
+Run an API example using .NET Core and the `mobius-client-dotnet` SDK. Navigate to the `dotnet-core-api` directory to run this API. For full documentation on this example, visit the official <a href="https://docs.mobius.network/docs/dotnet-core-api" target="_blank">.NET Core docs</a>.
+
+```console
+$ cd backend/php-api
+```
+
 ## Frontend Configuration
 The frontend of the application only needs minor setup and configuration to run. Full documentation on this process can be found by choosing any example from the official <a href="https://docs.mobius.network/docs" target="_blank">Mobius Docs</a>.
 
