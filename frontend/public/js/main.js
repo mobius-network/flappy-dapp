@@ -66,6 +66,12 @@ if(!g_token) {
 
 var g_paying = false;
 
+$.ajaxSetup({
+  headers:{
+    'Authorization': 'Bearer ' + g_token
+  }
+});
+
 $(document).ready(function() {
 	if(window.location.search == "?debug")
 		debugmode = true;
@@ -165,17 +171,17 @@ function startGame() {
 
   $("#credits_balance").html("Paying.........");
 
-   $.post(DAPP_API + "/charge?token=" + g_token, { amount: DAPP_PRICE })
-     .done(function (data) {
-       updateBalance(data.balance);
-       startGameReal();
-     })
-     .fail(function (data) {
-       alert("Oh no you don't have enough credits!! Buy more credits at https://mobius.network/store");
-     })
-     .always(function() {
-        g_paying = false;
-     });
+  $.post(DAPP_API + "/charge?token=" + g_token, { amount: DAPP_PRICE })
+    .done(function (data) {
+      updateBalance(data.balance);
+      startGameReal();
+    })
+    .fail(function (data) {
+      alert("Oh no you don't have enough credits!! Buy more credits at https://mobius.network/store");
+    })
+    .always(function() {
+      g_paying = false;
+    });
 }
 
 function startGameReal() {

@@ -7,3 +7,6 @@ env/
 mobius-client-python
 __pycache__
 vendor
+bin
+obj
+.vscode
