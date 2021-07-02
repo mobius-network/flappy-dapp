@@ -20,7 +20,7 @@
     "express-jwt": "^5.3.1",
     "jsonwebtoken": "^8.2.2",
     "pug": "^2.0.3",
-    "stellar-sdk": "^0.8.1",
+    "stellar-sdk": "^8.2.3",
     "webtask-tools": "^3.2.1"
   },
   "devDependencies": {
